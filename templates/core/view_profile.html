@@ -1,0 +1,1026 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+.profile-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background: #ffffff;
+}
+
+.profile-header {
+  background: #000000;
+  color: #ffffff;
+  padding: 40px 30px;
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.profile-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 2px;
+  background: #ffffff;
+  animation: expandLine 1s ease-out 0.5s both;
+}
+
+.profile-header h2 {
+  margin: 0 0 10px 0;
+  font-size: 2.5rem;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  animation: slideInFromTop 0.8s ease-out 0.3s both;
+}
+
+.profile-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.profile-content {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.profile-sidebar {
+  background: #ffffff;
+  padding: 30px;
+  border: 1px solid #e0e0e0;
+  border-radius: 1px;
+  text-align: center;
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+  animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+.profile-main {
+  background: #ffffff;
+  padding: 30px;
+  border: 1px solid #e0e0e0;
+  border-radius: 1px;
+  animation: fadeInUp 0.8s ease-out 0.7s both;
+}
+
+.profile-pic {
+  width: 150px;
+  height: 150px;
+  border-radius: 1px;
+  object-fit: cover;
+  margin: 0 auto 20px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+.profile-pic:hover {
+  transform: scale(1.02);
+  border-color: #000000;
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin: 25px 0;
+}
+
+.stat-item {
+  background: #fafafa;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 1px;
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: #000000;
+  margin-bottom: 5px;
+  letter-spacing: 0.5px;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #666666;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.profile-info {
+  text-align: left;
+  margin-bottom: 25px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+  padding: 12px;
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 1px;
+  transition: all 0.3s ease;
+}
+
+.info-item:hover {
+  border-color: #000000;
+  transform: translateX(5px);
+}
+
+.info-content {
+  flex: 1;
+}
+
+.info-label {
+  font-size: 0.85rem;
+  color: #666666;
+  font-weight: 300;
+  margin-bottom: 2px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.info-value {
+  font-size: 1rem;
+  color: #000000;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.btn-edit {
+  background: #000000;
+  color: #ffffff;
+  padding: 12px 30px;
+  border: 1px solid #000000;
+  border-radius: 1px;
+  text-decoration: none;
+  font-weight: 400;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.btn-edit:hover {
+  background: #ffffff;
+  color: #000000;
+  transform: translateY(-2px);
+}
+
+.btn-danger {
+  background: #ffffff;
+  color: #000000;
+  padding: 12px 30px;
+  border: 1px solid #000000;
+  border-radius: 1px;
+  text-decoration: none;
+  font-weight: 400;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-color: #666666;
+  color: #666666;
+}
+
+.btn-danger:hover {
+  background: #000000;
+  color: #ffffff;
+  transform: translateY(-2px);
+  border-color: #000000;
+}
+
+.section {
+  margin-bottom: 35px;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.section-title {
+  font-size: 1.4rem;
+  font-weight: 300;
+  color: #000000;
+  margin: 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.bio-content {
+  background: #fafafa;
+  padding: 20px;
+  border-radius: 1px;
+  border-left: 2px solid #000000;
+  line-height: 1.6;
+  color: #000000;
+  font-size: 1rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.skill-category {
+  background: #fafafa;
+  padding: 25px;
+  border: 1px solid #e0e0e0;
+  border-radius: 1px;
+  transition: all 0.3s ease;
+}
+
+.skill-category:hover {
+  transform: translateY(-3px);
+  border-color: #000000;
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.category-title {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #000000;
+  margin: 0;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.skill-content {
+  color: #000000;
+  line-height: 1.5;
+  font-size: 0.95rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.review-item {
+  background: #fafafa;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 1px;
+  transition: all 0.3s ease;
+}
+
+.review-item:hover {
+  transform: translateY(-2px);
+  border-color: #000000;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.reviewer-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reviewer-name {
+  font-weight: 400;
+  color: #000000;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+}
+
+.rating-stars {
+  color: #000000;
+  font-size: 1.1rem;
+  margin-left: 5px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.review-time {
+  color: #666666;
+  font-size: 0.85rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.review-comment {
+  color: #000000;
+  line-height: 1.5;
+  margin: 0;
+  padding-left: 10px;
+  border-left: 2px solid #000000;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666666;
+  background: #fafafa;
+  border: 1px dashed #e0e0e0;
+  border-radius: 1px;
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  opacity: 0.5;
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+  margin: 0;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.contact-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.btn-contact {
+  flex: 1;
+  background: #000000;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: 1px solid #000000;
+  border-radius: 1px;
+  text-decoration: none;
+  font-weight: 400;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.btn-contact:hover {
+  background: #ffffff;
+  color: #000000;
+  transform: translateY(-2px);
+}
+
+.badge-online {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #000000;
+  color: #ffffff;
+  padding: 4px 10px;
+  border: 1px solid #000000;
+  border-radius: 1px;
+  font-size: 0.8rem;
+  font-weight: 400;
+  margin-left: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.member-since {
+  background: #fafafa;
+  color: #000000;
+  padding: 8px 15px;
+  border: 1px solid #000000;
+  border-radius: 1px;
+  font-size: 0.85rem;
+  font-weight: 400;
+  display: inline-block;
+  margin-top: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Account Deletion Modal Styles */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  padding: 40px;
+  border: 1px solid #e0e0e0;
+  border-radius: 1px;
+  max-width: 500px;
+  width: 90%;
+  animation: modalSlideIn 0.3s ease;
+}
+
+.modal-header {
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: #000000;
+  margin: 0 0 10px 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.modal-subtitle {
+  color: #666666;
+  font-size: 1rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.modal-body {
+  margin-bottom: 30px;
+}
+
+.warning-text {
+  background: #fafafa;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 1px;
+  margin-bottom: 20px;
+}
+
+.warning-text p {
+  margin: 0 0 15px 0;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  color: #000000;
+}
+
+.warning-text ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #666666;
+}
+
+.warning-text li {
+  margin-bottom: 8px;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.confirmation-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 1px;
+  font-size: 1rem;
+  background: #ffffff;
+  color: #000000;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  margin-top: 10px;
+}
+
+.confirmation-input:focus {
+  border-color: #000000;
+  outline: none;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.btn-cancel {
+  background: #ffffff;
+  color: #000000;
+  padding: 12px 30px;
+  border: 1px solid #000000;
+  border-radius: 1px;
+  text-decoration: none;
+  font-weight: 400;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  flex: 1;
+  text-align: center;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background: #fafafa;
+  transform: translateY(-2px);
+}
+
+.btn-confirm-delete {
+  background: #000000;
+  color: #ffffff;
+  padding: 12px 30px;
+  border: 1px solid #000000;
+  border-radius: 1px;
+  text-decoration: none;
+  font-weight: 400;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  flex: 1;
+  text-align: center;
+  cursor: pointer;
+}
+
+.btn-confirm-delete:hover {
+  background: #ffffff;
+  color: #000000;
+  transform: translateY(-2px);
+}
+
+.btn-confirm-delete:disabled {
+  background: #666666;
+  border-color: #666666;
+  color: #ffffff;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes expandLine {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100px;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .profile-content {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .profile-sidebar {
+    position: static;
+  }
+  
+  .skills-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .profile-stats {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .profile-header h2 {
+    font-size: 2rem;
+  }
+  
+  .contact-actions {
+    flex-direction: column;
+  }
+  
+  .modal-content {
+    padding: 30px 20px;
+    width: 95%;
+  }
+  
+  .modal-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 30px 15px;
+  }
+  
+  .profile-header {
+    padding: 30px 25px;
+  }
+  
+  .profile-header h2 {
+    font-size: 1.8rem;
+  }
+  
+  .profile-sidebar,
+  .profile-main {
+    padding: 20px;
+  }
+  
+  .profile-pic {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+/* Focus states for accessibility */
+.btn-edit:focus,
+.btn-contact:focus,
+.btn-danger:focus,
+.btn-cancel:focus,
+.btn-confirm-delete:focus {
+  outline: 2px solid #000000;
+  outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+
+<div class="profile-container">
+  <!-- Profile Header -->
+  <div class="profile-header">
+    <h2>{{ profile_user.get_full_name|default:profile_user.username }}'s Profile</h2>
+    <p class="profile-subtitle">
+      {% if profile.course %}
+        {{ profile.course }} Student
+      {% else %}
+        SmartSwap Member
+      {% endif %}
+      <span class="badge-online">Online</span>
+    </p>
+  </div>
+
+  <div class="profile-content">
+    <!-- Sidebar -->
+    <div class="profile-sidebar">
+      <!-- Profile Picture -->
+      {% if profile.photo %}
+        <img src="{{ profile.photo.url }}" alt="Profile Photo" class="profile-pic">
+      {% else %}
+        <img src="{% static 'img/default-avatar.png' %}" alt="Default Photo" class="profile-pic">
+      {% endif %}
+
+      <!-- Stats -->
+      <div class="profile-stats">
+        <div class="stat-item">
+          <span class="stat-number">{{ profile_user.skills.count }}</span>
+          <span class="stat-label">Skills Shared</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{{ reviews.count }}</span>
+          <span class="stat-label">Reviews</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">
+            {% if reviews %}
+              {{ reviews|length }}
+            {% else %}
+              0
+            {% endif %}
+          </span>
+          <span class="stat-label">Completed Swaps</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">
+            {% if reviews %}
+              {{ reviews|length }}
+            {% else %}
+              0
+            {% endif %}
+          </span>
+          <span class="stat-label">Ratings</span>
+        </div>
+      </div>
+
+      <!-- Basic Info -->
+      <div class="profile-info">
+        <div class="info-item">
+          <div class="info-content">
+            <div class="info-label">Username</div>
+            <div class="info-value">@{{ profile_user.username }}</div>
+          </div>
+        </div>
+        
+        <div class="info-item">
+          <div class="info-content">
+            <div class="info-label">Email</div>
+            <div class="info-value">{{ profile_user.email }}</div>
+          </div>
+        </div>
+        
+        {% if profile.course %}
+        <div class="info-item">
+          <div class="info-content">
+            <div class="info-label">Course</div>
+            <div class="info-value">{{ profile.course }}</div>
+          </div>
+        </div>
+        {% endif %}
+        
+        {% if profile.year %}
+        <div class="info-item">
+          <div class="info-content">
+            <div class="info-label">Year</div>
+            <div class="info-value">{{ profile.year }}</div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Member Since Badge -->
+      <div class="member-since">
+        Member since {{ profile_user.date_joined|date:"M Y" }}
+      </div>
+
+      <!-- Action Buttons -->
+      {% if user == profile_user %}
+        <a href="{% url 'core:edit_profile' %}" class="btn-edit">
+          Edit Profile
+        </a>
+        <button class="btn-danger" onclick="openDeleteModal()">
+          Delete Account
+        </button>
+      {% else %}
+        <div class="contact-actions">
+          <a href="{% url 'core:chat_dashboard' %}?user={{ profile_user.username }}" class="btn-contact">
+            Send Message
+          </a>
+          <a href="{% url 'core:skill_list' %}?q={{ profile_user.username }}" class="btn-contact">
+            View Skills
+          </a>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Main Content -->
+    <div class="profile-main">
+      <!-- Bio Section -->
+      <div class="section">
+        <div class="section-header">
+          <h3 class="section-title">About Me</h3>
+        </div>
+        <div class="bio-content">
+          {{ profile.bio|default:"This user hasn't written a bio yet. Check out their skills to learn more about what they can teach and what they want to learn!"|linebreaks }}
+        </div>
+      </div>
+
+      <!-- Skills Section -->
+      <div class="section">
+        <div class="section-header">
+          <h3 class="section-title">Skills & Expertise</h3>
+        </div>
+        <div class="skills-grid">
+          <div class="skill-category">
+            <div class="category-header">
+              <h4 class="category-title">Skills I Can Teach</h4>
+            </div>
+            <div class="skill-content">
+              {{ profile.skills_offered|default:"No specific skills listed yet. This user might be new to SkillSwap!"|linebreaks }}
+            </div>
+          </div>
+          
+          <div class="skill-category">
+            <div class="category-header">
+              <h4 class="category-title">Skills I Want to Learn</h4>
+            </div>
+            <div class="skill-content">
+              {{ profile.skills_wanted|default:"No learning goals specified yet. Maybe they're still exploring what they want to learn!"|linebreaks }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reviews Section -->
+      <div class="section">
+        <div class="section-header">
+          <h3 class="section-title">Ratings & Reviews</h3>
+        </div>
+        
+        {% if reviews %}
+          <div class="reviews-list">
+            {% for review in reviews %}
+              <div class="review-item">
+                <div class="review-header">
+                  <div class="reviewer-info">
+                    <span class="reviewer-name">{{ review.reviewer.get_full_name|default:review.reviewer.username }}</span>
+                    <span class="rating-stars">
+                      {% with ''|center:review.rating as range %}
+                        {% for _ in range %}{% endfor %}
+                      {% endwith %}
+                      ({{ review.rating }}/5)
+                    </span>
+                  </div>
+                  <span class="review-time">{{ review.created_at|date:"M j, Y" }}</span>
+                </div>
+                <p class="review-comment">"{{ review.comment }}"</p>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="empty-state">
+            <div class="empty-state-icon">⭐</div>
+            <p>No reviews yet</p>
+            <p>Be the first to share your experience with {{ profile_user.first_name|default:profile_user.username }}!</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Account Deletion Modal -->
+<div id="deleteModal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">Delete Account</h3>
+      <p class="modal-subtitle">This action cannot be undone</p>
+    </div>
+    
+    <div class="modal-body">
+      <div class="warning-text">
+        <p><strong>Warning: You are about to permanently delete your account.</strong></p>
+        <p>This will immediately:</p>
+        <ul>
+          <li>Delete all your skills and skill requests</li>
+          <li>Remove all your reviews and ratings</li>
+          <li>Delete your message history</li>
+          <li>Cancel all your scheduled meetings</li>
+          <li>Permanently remove your profile data</li>
+        </ul>
+        <p>This action cannot be reversed. Please be certain.</p>
+      </div>
+      
+      <div>
+        <label for="confirmText" style="display: block; margin-bottom: 10px; font-weight: 300; letter-spacing: 0.5px;">
+          Type "DELETE ACCOUNT" to confirm:
+        </label>
+        <input 
+          type="text" 
+          id="confirmText" 
+          class="confirmation-input" 
+          placeholder="DELETE ACCOUNT"
+          oninput="toggleDeleteButton()"
+        >
+      </div>
+    </div>
+    
+    <div class="modal-actions">
+      <button type="button" class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+      <form id="deleteAccountForm" method="post" action="{% url 'core:delete_account' %}" style="display: inline; flex: 1;">
+        {% csrf_token %}
+        <button type="submit" class="btn-confirm-delete" id="confirmDeleteBtn" disabled>
+          Delete My Account
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+// Modal functionality
+function openDeleteModal() {
+  document.getElementById('deleteModal').style.display = 'block';
+  document.getElementById('confirmText').value = '';
+  document.getElementById('confirmDeleteBtn').disabled = true;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDeleteModal() {
+  document.getElementById('deleteModal').style.display = 'none';
+  document.body.style.overflow = 'auto';
+}
+
+function toggleDeleteButton() {
+  const confirmText = document.getElementById('confirmText').value;
+  const deleteButton = document.getElementById('confirmDeleteBtn');
+  deleteButton.disabled = confirmText !== 'DELETE ACCOUNT';
+}
+
+// Close modal when clicking outside
+document.getElementById('deleteModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeDeleteModal();
+  }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeDeleteModal();
+  }
+});
+
+// Prevent form submission if button is disabled
+document.getElementById('deleteAccountForm').addEventListener('submit', function(e) {
+  const confirmText = document.getElementById('confirmText').value;
+  if (confirmText !== 'DELETE ACCOUNT') {
+    e.preventDefault();
+    alert('Please type "DELETE ACCOUNT" to confirm deletion.');
+  } else {
+    if (!confirm('Are you absolutely sure? This cannot be undone!')) {
+      e.preventDefault();
+    }
+  }
+});
+</script>
+
+{% endblock %}

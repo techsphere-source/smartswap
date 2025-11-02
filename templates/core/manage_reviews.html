@@ -1,0 +1,336 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background: #ffffff;
+}
+
+.dashboard-header {
+  background: #000000;
+  color: #ffffff;
+  padding: 40px 30px;
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.dashboard-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 2px;
+  background: #ffffff;
+  animation: expandLine 1s ease-out 0.5s both;
+}
+
+.dashboard-header h2 {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  animation: slideInFromTop 0.8s ease-out 0.3s both;
+}
+
+.header-actions {
+  margin-top: 20px;
+}
+
+.btn-back {
+  background: #ffffff;
+  color: #000000;
+  padding: 12px 24px;
+  border: 1px solid #ffffff;
+  border-radius: 1px;
+  text-decoration: none;
+  font-weight: 400;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.btn-back:hover {
+  background: #000000;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.reviews-section {
+  background: #ffffff;
+  padding: 0;
+  margin-bottom: 40px;
+  border: 1px solid #e0e0e0;
+  border-radius: 1px;
+  animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: 1px;
+}
+
+.reviews-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  animation: fadeInUp 0.8s ease-out 0.7s both;
+}
+
+.reviews-table th {
+  background: #000000;
+  color: #ffffff;
+  padding: 20px 16px;
+  text-align: left;
+  font-weight: 400;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #333333;
+}
+
+.reviews-table td {
+  padding: 20px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  color: #000000;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.reviews-table tr:last-child td {
+  border-bottom: none;
+}
+
+.reviews-table tr:hover {
+  background: #fafafa;
+}
+
+.btn-delete {
+  padding: 8px 16px;
+  border: 1px solid #000000;
+  border-radius: 1px;
+  font-size: 0.85rem;
+  font-weight: 400;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: inline-block;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  background: #ffffff;
+  color: #000000;
+}
+
+.btn-delete:hover {
+  background: #000000;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.rating-stars {
+  color: #000000;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 30px;
+  color: #666666;
+  background: #fafafa;
+  border: 1px dashed #e0e0e0;
+  border-radius: 1px;
+}
+
+.empty-state div {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.comment-preview {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table-scroll-hint {
+  display: none;
+  text-align: center;
+  color: #666666;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  padding: 15px;
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 1px;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes expandLine {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100px;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 30px 15px;
+  }
+  
+  .dashboard-header {
+    padding: 30px 25px;
+  }
+  
+  .dashboard-header h2 {
+    font-size: 2rem;
+  }
+  
+  .reviews-table {
+    min-width: 700px;
+  }
+  
+  .table-scroll-hint {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-header h2 {
+    font-size: 1.6rem;
+  }
+  
+  .btn-back {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+  
+  .reviews-table th,
+  .reviews-table td {
+    padding: 15px 12px;
+  }
+}
+
+/* Focus states for accessibility */
+.btn-back:focus,
+.btn-delete:focus {
+  outline: 2px solid #000000;
+  outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+
+<div class="dashboard-container">
+  <!-- Dashboard Header -->
+  <div class="dashboard-header">
+    <h2 style="color: aliceblue;">Manage Reviews</h2>
+    <div class="header-actions">
+      <a href="{% url 'core:admin_dashboard' %}" class="btn-back">
+        Back to Dashboard
+      </a>
+    </div>
+  </div>
+
+  <!-- Reviews Section -->
+  <div class="reviews-section">
+    <div class="table-scroll-hint">
+      Scroll horizontally to view all table columns
+    </div>
+
+    <div class="table-container">
+      <table class="reviews-table">
+        <thead>
+          <tr>
+            <th>Skill</th>
+            <th>Reviewer</th>
+            <th>Rating</th>
+            <th>Comment</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for review in reviews %}
+          <tr>
+            <td><strong>{{ review.skill.title }}</strong></td>
+            <td>{{ review.reviewer.username }}</td>
+            <td class="rating-stars">{{ review.rating }}/5</td>
+            <td class="comment-preview">{{ review.comment|truncatechars:60 }}</td>
+            <td>{{ review.created_at|date:"Y-m-d H:i" }}</td>
+            <td>
+              <a href="{% url 'core:delete_review' review.id %}" class="btn-delete" onclick="return confirm('Delete this review?')">Delete</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="6">
+              <div class="empty-state">
+                <div>⭐</div>
+                <p>No reviews available</p>
+                <p>When users leave reviews, they'll appear here</p>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
